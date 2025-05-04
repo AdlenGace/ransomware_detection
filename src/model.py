@@ -99,29 +99,32 @@ def main():
     # Check if the 'label' column exists
     if 'label' not in data.columns:
         print("Warning: 'label' column not found in the data. Assigning default labels.")
-        # Assign default labels (you can adjust this logic as needed)
-        data['label'] = 0  # Set all labels to 0 or based on your logic
+        data['label'] = 0  # Assign all 0 or customize this logic as needed
 
-    # One-Hot Encode the 'protocol' column (Convert 'TCP' and 'UDP' into separate binary columns)
+    # One-Hot Encode the 'protocol' column
     data = pd.get_dummies(data, columns=['protocol'], drop_first=True)
 
     # Split features and labels
-    X = data.drop(columns=['ip_address', 'label'])  # Assuming 'label' is your target column
+    X = data.drop(columns=['ip_address', 'label'])
     y = data['label']
 
     # Split into training and testing sets
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
-    
+
     # Standardize the features
     scaler = StandardScaler()
     X_train = scaler.fit_transform(X_train)
     X_test = scaler.transform(X_test)
-    
+
+    # Save the fitted scaler
+    scaler_path = '/home/adlen/Desktop/Projects/ransomware_detections_project/data/models/scaler.pkl'
+    joblib.dump(scaler, scaler_path)
+
     # Train the model
     model_path = '/home/adlen/Desktop/Projects/ransomware_detections_project/data/models/random_forest_model.pkl'
     rf_model = train_random_forest(X_train, y_train)
     save_model(rf_model, model_path)
-    
+
     # Evaluate the model
     evaluate_model(rf_model, X_test, y_test)
 
