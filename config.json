@@ -1,0 +1,6 @@
+{
+    "log_file_path": "data/raw_logs/",
+    "model_save_path": "models/ransomware_detection_model.pkl",
+    "scaler_save_path": "models/scaler.pkl"
+  }
+  
